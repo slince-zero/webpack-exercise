@@ -1,13 +1,18 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin') // 提取css
 const TerserPlugin = require('terser-webpack-plugin') // 压缩js
 const { CleanWebpackPlugin } = require('clean-webpack-plugin') // 清除dist目录，由于使用 contenhash，所以代码变化每次 build 都会生成新的 js 文件
+/** 用于生成一个 HTML 文件作为 WEB 应用程序的入口 */
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './src/index.js',
+  // entry: './src/index.js',
+  entry: {
+    index: './src/index.js',
+    img: './src/img.js',
+  },
   output: {
     // [contenthash] 代表文件内容的 hash 值,目的是使用浏览器缓存
-    filename: 'bundle.[contenthash].js',
+    filename: '[name].[contenthash].js',
     path: __dirname + '/dist',
 
     // publicPath 默认值是 auto，会自动判断，这个主要是用来解决图片等资源路径问题
@@ -18,6 +23,13 @@ module.exports = {
     publicPath: '', // 当使用 HtmlWebpackPlugin 时，publicPath 应该设置为空字符串
   },
   mode: 'production',
+  // optimization 是一个配置选项，用于优化打包输出的代码
+  optimization: {
+    // splitChunks 是一个配置选项，用于动态分割代码
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   module: {
     rules: [
       // 必须要有的，不然打包的时候会报错，你可以理解成，我想导入一张图片，以怎样的规则来导入
@@ -57,14 +69,23 @@ module.exports = {
   plugins: [
     new TerserPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'style.[contenthash].css',
+      filename: '[name].[contenthash].css',
     }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'hello webpack',
+      chunks: ['index'],
       filename: 'indexs.html',
       meta: {
         description: 'hello webpack',
+      },
+    }),
+    new HtmlWebpackPlugin({
+      title: 'hello webpack-img',
+      chunks: ['img'],
+      filename: 'index-img.html',
+      meta: {
+        description: 'hello webpack-img',
       },
     }),
   ],
