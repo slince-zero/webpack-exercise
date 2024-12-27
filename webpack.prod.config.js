@@ -19,8 +19,8 @@ module.exports = {
     // publicPath: 'auto',
     // 同样也可以设置 CDN 目录
     // publicPath: 'http://some-cdn.com/',
-    // publicPath: 'dist/',
-    publicPath: '', // 当使用 HtmlWebpackPlugin 时，publicPath 应该设置为空字符串
+    publicPath: '/static/',
+    // publicPath: '', // 当使用 HtmlWebpackPlugin 时，publicPath 应该设置为空字符串
   },
   mode: 'production',
   // optimization 是一个配置选项，用于优化打包输出的代码
